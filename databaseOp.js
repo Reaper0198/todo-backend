@@ -1,32 +1,33 @@
-const fs = require('fs')
+// const fs = require('fs')
+import fs from 'fs/promises';
 
-let toDoList, newId;
+async function readFromDatabase(){
+    const data = await fs.readFile('database.json', 'utf-8')
 
-function readFromDatabase(){
-    fs.readFile('database.json', 'utf-8', (err, data) =>{
-        if(err){
-            console.log(err);
-        } 
-        
-        toDoList = JSON.parse(data);
-        console.log(toDoList);
-        newId = parseInt(toDoList.curId);
-        
-    })
+    return JSON.parse(data);
 }
 
-function writeToDatabase(){
-        fs.writeFile('database.json', JSON.stringify(toDoList), (err) =>{
-        if(err){
-            console.log("Error Occured!")
-        }else{
-            res.send(newToDo);
-        }
-    })
+async function writeToDatabase(databaseObj){
+    await fs.writeFile('database.json', JSON.stringify(databaseObj, null, 4))
 }
 
-function getToDoList(){
-    return toDoList;
+async function addToDatabase(newToDo){
+    let databaseObj = await readFromDatabase();
+
+    databaseObj.list.push(newToDo)
+    databaseObj.curId++;
+    await writeToDatabase(databaseObj);
 }
 
-module.exports =  {newId, toDoList, writeToDatabase, readFromDatabase};
+async function getToDoList(){
+    const databaseObj = await readFromDatabase();
+    console.log(databaseObj);
+    return databaseObj.list;
+}
+
+async function getNewId(){
+    const databaseObj = await readFromDatabase();
+    return databaseObj.curId;
+}
+
+export {addToDatabase, getToDoList, getNewId};
