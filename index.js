@@ -1,24 +1,14 @@
-const fs = require('fs')
-const database = require('./database.json');
+const { toDoList, newId, readFromDatabase, writeToDatabase } = require('./databaseOp.js');
 const express = require('express')
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let toDoList, newId;
-fs.readFile('database.json', 'utf-8', (err, data) =>{
-    if(err){
-        console.log(err);
-    } 
-    
-    toDoList = JSON.parse(data);
-    newId = parseInt(toDoList.curId);
-    
-})
-
 
 app.get('/todo', (req, res) =>{
+    readFromDatabase();
+    console.log(toDoList);
     res.send(toDoList);
 })
 
@@ -33,13 +23,8 @@ app.post('/todo/add', (req, res) =>{
     toDoList.curId = newId;
     toDoList.List.push(newToDo);
 
-    fs.writeFile('database.json', JSON.stringify(toDoList), (err) =>{
-        if(err){
-            console.log("Error Occured!")
-        }else{
-            res.send(newToDo);
-        }
-    })
+    writeToDatabase();
+
 })
 
 app.listen(3000, (err) =>{
