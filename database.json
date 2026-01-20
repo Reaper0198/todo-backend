@@ -1,0 +1,21 @@
+{
+    "curId": 4,
+    "List": [
+        {
+            "id": 0,
+            "toDo": "buy coffee"
+        },
+        {
+            "id": 1,
+            "toDo": "go to gym"
+        },
+        {
+            "id": 2,
+            "toDo": "buy milk"
+        },
+        {
+            "id": 3,
+            "toDo": "order glasses online"
+        }
+    ]
+}
