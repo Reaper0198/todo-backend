@@ -30,7 +30,7 @@ async function getNewId(){
     return databaseObj.curId;
 }
 
-async function updateThisToDo(updatedEntry) {
+async function updateDatabase(updatedEntry) {
     let databaseObj = await readFromDatabase();
 
     databaseObj.list.forEach(task => {
@@ -42,4 +42,12 @@ async function updateThisToDo(updatedEntry) {
     await writeToDatabase(databaseObj);
 }
 
-export {addToDatabase, getToDoList, getNewId, updateThisToDo};
+async function deleteFromDatabase(deleteThis){
+    let databaseObj = await readFromDatabase();
+
+    databaseObj.list = databaseObj.list.filter(task => parseInt(deleteThis.id) !== task.id);
+
+    await writeToDatabase(databaseObj);
+}
+
+export {addToDatabase, getToDoList, getNewId, updateDatabase, deleteFromDatabase};

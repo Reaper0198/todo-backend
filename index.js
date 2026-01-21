@@ -1,7 +1,4 @@
-// const { toDoList, newId, readFromDatabase, writeToDatabase } = require('./databaseOp.js');
-// const express = require('express')
-
-import {getNewId, getToDoList, addToDatabase, updateThisToDo} from './databaseOp.js';
+import {getNewId, getToDoList, addToDatabase, updateDatabase, deleteFromDatabase} from './databaseOp.js';
 import express from 'express';
 
 const app = express();
@@ -31,13 +28,29 @@ app.put("/todo/update", async (req, res) =>{
     try{
         const updatedEntry = req.body;
     
-        await updateThisToDo(updatedEntry);
+        await updateDatabase(updatedEntry);
 
         res.status(200).send(updatedEntry)
 
     }catch(err){
         console.log(err);
     }
+})
+
+app.delete('/todo/delete', async (req, res) => {
+    const deleteThis = req.body;
+
+    try{
+        await deleteFromDatabase(deleteThis);
+
+        res.status(200).send({
+            "Status" : "200",
+            "message" : "Deleted ToDo"
+        })
+    }catch(err){
+        console.log(err);
+    }
+
 })
 
 app.listen(3000, (err) =>{
