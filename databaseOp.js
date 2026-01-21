@@ -30,4 +30,16 @@ async function getNewId(){
     return databaseObj.curId;
 }
 
-export {addToDatabase, getToDoList, getNewId};
+async function updateThisToDo(updatedEntry) {
+    let databaseObj = await readFromDatabase();
+
+    databaseObj.list.forEach(task => {
+        if(task.id === parseInt(updatedEntry.id)){
+            task.toDo = updatedEntry.newToDo;
+        }
+    })
+
+    await writeToDatabase(databaseObj);
+}
+
+export {addToDatabase, getToDoList, getNewId, updateThisToDo};

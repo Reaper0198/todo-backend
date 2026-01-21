@@ -1,7 +1,7 @@
 // const { toDoList, newId, readFromDatabase, writeToDatabase } = require('./databaseOp.js');
 // const express = require('express')
 
-import {getNewId, getToDoList, addToDatabase} from './databaseOp.js';
+import {getNewId, getToDoList, addToDatabase, updateThisToDo} from './databaseOp.js';
 import express from 'express';
 
 const app = express();
@@ -25,6 +25,19 @@ app.post('/todo/add', async (req, res) =>{
     res.send(newToDo);
 
 
+})
+
+app.put("/todo/update", async (req, res) =>{
+    try{
+        const updatedEntry = req.body;
+    
+        await updateThisToDo(updatedEntry);
+
+        res.status(200).send(updatedEntry)
+
+    }catch(err){
+        console.log(err);
+    }
 })
 
 app.listen(3000, (err) =>{
